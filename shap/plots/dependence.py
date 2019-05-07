@@ -112,7 +112,7 @@ def dependence_plot(ind, shap_values, features, feature_names=None, display_feat
 
         if show:
             pl.show()
-        return
+        return pl
 
     assert shap_values.shape[0] == features.shape[0], \
         "'shap_values' and 'features' values must have the same number of rows!"
@@ -273,3 +273,4 @@ def dependence_plot(ind, shap_values, features, feature_names=None, display_feat
         with warnings.catch_warnings(): # ignore expected matplotlib warnings
             warnings.simplefilter("ignore", RuntimeWarning)
             pl.show()
+    return pl

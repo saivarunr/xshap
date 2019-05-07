@@ -128,7 +128,7 @@ def summary_plot(shap_values, features=None, feature_names=None, max_display=Non
         pl.subplots_adjust(hspace=0, wspace=0.1)
         if show:
             pl.show()
-        return
+        return pl
 
     if max_display is None:
         max_display = 20
@@ -407,6 +407,7 @@ def summary_plot(shap_values, features=None, feature_names=None, max_display=Non
         pl.xlabel(labels['VALUE'], fontsize=13)
     if show:
         pl.show()
+    return pl
 
 def shorten_text(text, length_limit):
     if len(text) > length_limit:
