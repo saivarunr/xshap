@@ -2,6 +2,7 @@ import sklearn
 import sklearn.ensemble
 import gc
 from sklearn.preprocessing import StandardScaler
+import numpy as np
 
 class KerasWrap(object):
     """ A wrapper that allows us to set parameters in the constructor and do a reset before fitting.
@@ -44,12 +45,14 @@ def corrgroups60__ridge():
 def corrgroups60__decision_tree():
     """ Decision Tree
     """
-    return sklearn.tree.DecisionTreeRegressor(random_state=0)
+
+    # max_depth was chosen to minimise test error
+    return sklearn.tree.DecisionTreeRegressor(random_state=0, max_depth=6)
 
 def corrgroups60__random_forest():
     """ Random Forest
     """
-    return sklearn.ensemble.RandomForestRegressor(random_state=0)
+    return sklearn.ensemble.RandomForestRegressor(100, random_state=0)
 
 def corrgroups60__gbm():
     """ Gradient Boosted Trees
@@ -91,12 +94,14 @@ def independentlinear60__ridge():
 def independentlinear60__decision_tree():
     """ Decision Tree
     """
-    return sklearn.tree.DecisionTreeRegressor(random_state=0)
+
+    # max_depth was chosen to minimise test error
+    return sklearn.tree.DecisionTreeRegressor(random_state=0, max_depth=4)
 
 def independentlinear60__random_forest():
     """ Random Forest
     """
-    return sklearn.ensemble.RandomForestRegressor(random_state=0)
+    return sklearn.ensemble.RandomForestRegressor(100, random_state=0)
 
 def independentlinear60__gbm():
     """ Gradient Boosted Trees
@@ -148,7 +153,7 @@ def cric__ridge():
 def cric__decision_tree():
     """ Decision Tree
     """
-    model = sklearn.tree.DecisionTreeClassifier(random_state=0)
+    model = sklearn.tree.DecisionTreeClassifier(random_state=0, max_depth=4)
 
     # we want to explain the raw probability outputs of the trees
     model.predict = lambda X: model.predict_proba(X)[:,1]
@@ -199,3 +204,28 @@ def cric__ffnn():
                 metrics=['accuracy'])
 
     return KerasWrap(model, 30, flatten_output=True)
+
+
+def human__decision_tree():
+    """ Decision Tree
+    """
+
+    # build data
+    N = 1000000
+    M = 3
+    X = np.zeros((N,M))
+    X.shape
+    y = np.zeros(N)
+    X[0, 0] = 1
+    y[0] = 8
+    X[1, 1] = 1
+    y[1] = 8
+    X[2, 0:2] = 1
+    y[2] = 4
+
+    # fit model
+    xor_model = sklearn.tree.DecisionTreeRegressor(max_depth=2)
+    xor_model.fit(X, y)
+
+    return xor_model
+

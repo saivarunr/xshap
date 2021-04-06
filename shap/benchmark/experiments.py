@@ -24,35 +24,66 @@ from threading import Thread, Lock
 
 
 regression_metrics = [
-    "runtime",
     "local_accuracy",
     "consistency_guarantees",
-    "mask_keep_positive",
-    "mask_keep_negative",
-    "keep_positive",
-    "keep_negative",
-    "batch_keep_absolute__r2",
-    "mask_remove_positive",
-    "mask_remove_negative",
-    "remove_positive",
-    "remove_negative",
-    "batch_remove_absolute__r2"
+    "keep_positive_mask",
+    "keep_positive_resample",
+    #"keep_positive_impute",
+    "keep_negative_mask",
+    "keep_negative_resample",
+    #"keep_negative_impute",
+    "keep_absolute_mask__r2",
+    "keep_absolute_resample__r2",
+    #"keep_absolute_impute__r2",
+    "remove_positive_mask",
+    "remove_positive_resample",
+    #"remove_positive_impute",
+    "remove_negative_mask",
+    "remove_negative_resample",
+    #"remove_negative_impute",
+    "remove_absolute_mask__r2",
+    "remove_absolute_resample__r2",
+    #"remove_absolute_impute__r2"
+    "runtime",
 ]
 
 binary_classification_metrics = [
-    "runtime",
     "local_accuracy",
     "consistency_guarantees",
-    "mask_keep_positive",
-    "mask_keep_negative",
-    "keep_positive",
-    "keep_negative",
-    "batch_keep_absolute__roc_auc",
-    "mask_remove_positive",
-    "mask_remove_negative",
-    "remove_positive",
-    "remove_negative",
-    "batch_remove_absolute__roc_auc"
+    "keep_positive_mask",
+    "keep_positive_resample",
+    #"keep_positive_impute",
+    "keep_negative_mask",
+    "keep_negative_resample",
+    #"keep_negative_impute",
+    "keep_absolute_mask__roc_auc",
+    "keep_absolute_resample__roc_auc",
+    #"keep_absolute_impute__roc_auc",
+    "remove_positive_mask",
+    "remove_positive_resample",
+    #"remove_positive_impute",
+    "remove_negative_mask",
+    "remove_negative_resample",
+    #"remove_negative_impute",
+    "remove_absolute_mask__roc_auc",
+    "remove_absolute_resample__roc_auc",
+    #"remove_absolute_impute__roc_auc"
+    "runtime",
+]
+
+human_metrics = [
+    "human_and_00",
+    "human_and_01",
+    "human_and_11",
+    "human_or_00",
+    "human_or_01",
+    "human_or_11",
+    "human_xor_00",
+    "human_xor_01",
+    "human_xor_11",
+    "human_sum_00",
+    "human_sum_01",
+    "human_sum_11"
 ]
 
 linear_regress_methods = [
@@ -64,7 +95,7 @@ linear_regress_methods = [
     #"kernel_shap_100_meanref",
     #"sampling_shap_10000",
     "sampling_shap_1000",
-    #"lime_tabular_regression_1000"
+    "lime_tabular_regression_1000"
     #"sampling_shap_100"
 ]
 
@@ -86,7 +117,7 @@ tree_regress_methods = [
     # NEED tree_shap_ind
     # NEED split_count?
     "tree_shap_tree_path_dependent",
-    "tree_shap_independent_1000",
+    "tree_shap_independent_200",
     "saabas",
     "random",
     "tree_gain",
@@ -95,15 +126,20 @@ tree_regress_methods = [
     #"kernel_shap_100_meanref",
     #"sampling_shap_10000",
     "sampling_shap_1000",
-    #"lime_tabular_regression_1000"
+    "lime_tabular_regression_1000",
+    "maple"
     #"sampling_shap_100"
+]
+
+rf_regress_methods = [ # methods that only support random forest models
+    "tree_maple"
 ]
 
 tree_classify_methods = [
     # NEED tree_shap_ind
     # NEED split_count?
     "tree_shap_tree_path_dependent",
-    "tree_shap_independent_1000",
+    "tree_shap_independent_200",
     "saabas",
     "random",
     "tree_gain",
@@ -112,7 +148,8 @@ tree_classify_methods = [
     #"kernel_shap_100_meanref",
     #"sampling_shap_10000",
     "sampling_shap_1000",
-    #"lime_tabular_regression_1000"
+    "lime_tabular_classification_1000",
+    "maple"
     #"sampling_shap_100"
 ]
 
@@ -138,14 +175,14 @@ _experiments = []
 _experiments += [["corrgroups60", "lasso", m, s] for s in regression_metrics for m in linear_regress_methods]
 _experiments += [["corrgroups60", "ridge", m, s] for s in regression_metrics for m in linear_regress_methods]
 _experiments += [["corrgroups60", "decision_tree", m, s] for s in regression_metrics for m in tree_regress_methods]
-_experiments += [["corrgroups60", "random_forest", m, s] for s in regression_metrics for m in tree_regress_methods]
+_experiments += [["corrgroups60", "random_forest", m, s] for s in regression_metrics for m in (tree_regress_methods + rf_regress_methods)]
 _experiments += [["corrgroups60", "gbm", m, s] for s in regression_metrics for m in tree_regress_methods]
 _experiments += [["corrgroups60", "ffnn", m, s] for s in regression_metrics for m in deep_regress_methods]
 
 _experiments += [["independentlinear60", "lasso", m, s] for s in regression_metrics for m in linear_regress_methods]
 _experiments += [["independentlinear60", "ridge", m, s] for s in regression_metrics for m in linear_regress_methods]
 _experiments += [["independentlinear60", "decision_tree", m, s] for s in regression_metrics for m in tree_regress_methods]
-_experiments += [["independentlinear60", "random_forest", m, s] for s in regression_metrics for m in tree_regress_methods]
+_experiments += [["independentlinear60", "random_forest", m, s] for s in regression_metrics for m in (tree_regress_methods + rf_regress_methods)]
 _experiments += [["independentlinear60", "gbm", m, s] for s in regression_metrics for m in tree_regress_methods]
 _experiments += [["independentlinear60", "ffnn", m, s] for s in regression_metrics for m in deep_regress_methods]
 
@@ -155,6 +192,9 @@ _experiments += [["cric", "decision_tree", m, s] for s in binary_classification_
 _experiments += [["cric", "random_forest", m, s] for s in binary_classification_metrics for m in tree_classify_methods]
 _experiments += [["cric", "gbm", m, s] for s in binary_classification_metrics for m in tree_classify_methods]
 _experiments += [["cric", "ffnn", m, s] for s in binary_classification_metrics for m in deep_classify_methods]
+
+_experiments += [["human", "decision_tree", m, s] for s in human_metrics for m in tree_regress_methods]
+
 
 def experiments(dataset=None, model=None, method=None, metric=None):
     for experiment in _experiments:

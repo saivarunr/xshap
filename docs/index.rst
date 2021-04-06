@@ -3,34 +3,40 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. image:: artwork/shap_diagram.png
-   :width: 400px
+Welcome to the SHAP documentation
+---------------------------------
+
+.. image:: artwork/shap_header.png
+   :width: 600px
    :align: center
 
-SHAP (SHapley Additive exPlanations) is a unified approach to explain the output of any machine
-learning model. SHAP connects game theory with local explanations, uniting several previous
-methods and representing the only possible consistent and locally accurate additive
-feature attribution method based on expectations (see the SHAP NIPS paper for details).
+**SHAP (SHapley Additive exPlanations)** is a game theoretic approach to explain the output of
+any machine learning model. It connects optimal credit allocation with local explanations
+using the classic Shapley values from game theory and their related extensions (see 
+`papers <https://github.com/slundberg/shap#citations>`_ for details and citations).
+
+Install
+=======
+
+SHAP can be installed from either `PyPI <https://pypi.org/project/shap>`_ or 
+`conda-forge <https://anaconda.org/conda-forge/shap>`_::
+
+   pip install shap
+   or
+   conda install -c conda-forge shap
+
+
+Contents
+========
 
 .. toctree::
    :maxdepth: 2
 
-Explainers
-=====================
-
-.. autoclass:: shap.TreeExplainer
-   :members:
-
-.. autoclass:: shap.KernelExplainer
-   :members:
-
-.. autoclass:: shap.DeepExplainer
-   :members:
-
-Plots
-=====================
-
-.. autofunction:: shap.summary_plot
-.. autofunction:: shap.dependence_plot
-.. autofunction:: shap.force_plot
-.. autofunction:: shap.image_plot
+   Topical overviews <overviews>
+   Tabular examples <tabular_examples>
+   Text examples <text_examples>
+   Image examples <image_examples>
+   Genomic examples <genomic_examples>
+   Benchmarks <benchmarks>
+   API reference <api>
+   API examples <api_examples>

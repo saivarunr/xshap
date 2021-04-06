@@ -40,29 +40,29 @@ def kernel_shap_1000_meanref(model, data):
     return lambda X: KernelExplainer(model.predict, kmeans(data, 1)).shap_values(X, nsamples=1000, l1_reg=0)
 
 def sampling_shap_1000(model, data):
-    """ Sampling SHAP 1000
+    """ IME 1000
     color = red_blue_circle(0.5)
     linestyle = dashed
     """
     return lambda X: SamplingExplainer(model.predict, data).shap_values(X, nsamples=1000)
 
 def tree_shap_tree_path_dependent(model, data):
-    """ Tree SHAP (path dependent)
+    """ TreeExplainer
     color = red_blue_circle(0)
     linestyle = solid
     """
     return TreeExplainer(model, feature_dependence="tree_path_dependent").shap_values
 
-def tree_shap_independent_1000(model, data):
-    """ Tree SHAP (independent)
+def tree_shap_independent_200(model, data):
+    """ TreeExplainer (independent)
     color = red_blue_circle(0)
     linestyle = dashed
     """
-    data1000 = sklearn.utils.resample(data, replace=False, n_samples=min(1000, data.shape[0]), random_state=0)
-    return TreeExplainer(model, data1000, feature_dependence="independent").shap_values
+    data_subsample = sklearn.utils.resample(data, replace=False, n_samples=min(200, data.shape[0]), random_state=0)
+    return TreeExplainer(model, data_subsample, feature_dependence="independent").shap_values
 
 def mean_abs_tree_shap(model, data):
-    """ mean(|Tree SHAP|)
+    """ mean(|TreeExplainer|)
     color = red_blue_circle(0.25)
     linestyle = solid
     """
@@ -90,8 +90,28 @@ def tree_gain(model, data):
 
 def lime_tabular_regression_1000(model, data):
     """ LIME Tabular 1000
+    color = red_blue_circle(0.75)
     """
     return lambda X: other.LimeTabularExplainer(model.predict, data, mode="regression").attributions(X, nsamples=1000)
+
+def lime_tabular_classification_1000(model, data):
+    """ LIME Tabular 1000
+    color = red_blue_circle(0.75)
+    """
+    return lambda X: other.LimeTabularExplainer(model.predict_proba, data, mode="classification").attributions(X, nsamples=1000)[1]
+
+def maple(model, data):
+    """ MAPLE
+    color = red_blue_circle(0.6)
+    """
+    return lambda X: other.MapleExplainer(model.predict, data).attributions(X, multiply_by_input=False)
+
+def tree_maple(model, data):
+    """ Tree MAPLE
+    color = red_blue_circle(0.6)
+    linestyle = dashed
+    """
+    return lambda X: other.TreeMapleExplainer(model, data).attributions(X, multiply_by_input=False)
 
 def deep_shap(model, data):
     """ Deep SHAP (DeepLIFT)
